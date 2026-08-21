@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:inb_portal_test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false   # H2 doesn't understand every Postgres-specific migration clause; schema is
+                      # generated from entities for fast unit/slice tests instead.
+
+app:
+  jwt:
+    secret: test_only_secret_key_must_be_at_least_256_bits_long_1234567890
+    expiration-ms: 3600000
+  file-storage:
+    upload-dir: ./build/test-uploads
+    public-base-url: http://localhost:8085/files
+  cors:
+    allowed-origins: http://localhost:3000
