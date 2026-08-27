@@ -119,6 +119,12 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- File content-type detection (magic-byte sniffing, not just trusting the extension) -->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>2.9.2</version>
+        </dependency>
     </dependencies>
 
     <build>
