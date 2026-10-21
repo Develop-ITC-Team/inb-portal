@@ -71,6 +71,26 @@ class PublicArticleControllerIT {
     }
 
     @Test
+    void listPublishedArticles_filteredByCategoryId_excludesOtherCategories() throws Exception {
+        Category otherCategory = categoryRepository.save(Category.builder()
+                .name("Sports").slug("sports").active(true).displayOrder(2).build());
+
+        articleRepository.save(Article.builder()
+                .category(category).title("In National News").slug("in-national-news")
+                .content("Body").status(ArticleStatus.PUBLISHED).publishedAt(OffsetDateTime.now())
+                .build());
+        articleRepository.save(Article.builder()
+                .category(otherCategory).title("In Sports").slug("in-sports")
+                .content("Body").status(ArticleStatus.PUBLISHED).publishedAt(OffsetDateTime.now())
+                .build());
+
+        mockMvc.perform(get("/api/public/articles").param("categoryId", category.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.totalElements", is(1)))
+                .andExpect(jsonPath("$.data.content[0].slug", is("in-national-news")));
+    }
+
+    @Test
     void getBySlug_returns404_forDraftArticle() throws Exception {
         articleRepository.save(Article.builder()
                 .category(category).title("Draft Article").slug("draft-article")
