@@ -15,7 +15,10 @@ import java.util.regex.Pattern;
 public final class SlugUtil {
 
     private static final Pattern WHITESPACE = Pattern.compile("[\\s]+");
-    private static final Pattern DISALLOWED = Pattern.compile("[^\\p{L}\\p{Nd}-]");
+    // \p{M} (combining marks) is essential for Khmer: dependent vowel signs and other
+    // diacritics are category Mark, not Letter, so omitting them here silently destroys
+    // Khmer text - a consonant skeleton survives, but the vowels needed to read it don't.
+    private static final Pattern DISALLOWED = Pattern.compile("[^\\p{L}\\p{Nd}\\p{M}-]");
     private static final Pattern MULTI_DASH = Pattern.compile("-{2,}");
 
     private SlugUtil() {

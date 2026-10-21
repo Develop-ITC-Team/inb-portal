@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryResponseDTO toTreeDto(Category category) {
         CategoryResponseDTO dto = categoryMapper.toDto(category);
         List<CategoryResponseDTO> children = category.getChildren().stream()
-                .filter(Category::isActive)
+                .filter(c -> c.isActive() && !c.isDeleted())
                 .sorted((a, b) -> Integer.compare(a.getDisplayOrder(), b.getDisplayOrder()))
                 .map(this::toTreeDto)
                 .toList();
